@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unity Club</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #2563eb;
+}
+header img {
+    height: 60px;
+    margin-right: 15px;
+}
+header h1 {
+    color: #3b82f6;
+}
+.container {
+    padding: 20px;
+}
+.welcome {
+    background: #e5e7eb;
+    color: #1e3a8a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.calendar {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 10px;
+}
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+.day {
+    background: #334155;
+    padding: 10px;
+    height: 80px;
+    border-radius: 5px;
+    position: relative;
+}
+.event {
+    background: #3b82f6;
+    padding: 3px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+button {
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<header>
+    <img src="LOGO.png" alt="Logo">
+    <h1>UNITY CLUB</h1>
+</header>
+
+<div class="container">
+    <div class="welcome">
+        <h2>Welcome to Unity Club!</h2>
+        <p>We are a community built on connection, compassion, and fun. Join us every Saturday!</p>
+    </div>
+
+    <div class="calendar">
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)">Prev</button>
+            <h2 id="monthYear"></h2>
+            <button onclick="changeMonth(1)">Next</button>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+    </div>
+</div>
+
+<script>
+let currentDate = new Date();
+
+// EDIT YOUR EVENTS HERE
+const events = {
+    //"2026-04-04": ["Weekly meeting"],
+   // "2026-04-11": ["Weekly meeting, "LAUNCH"],
+    "2026-04-18": ["FIRST VIRTUAL MEETING @5:00 PM", "MEET AND GREET"],
+    "2026-04-25": ["GAMES NIGHT @5:30 PM"],
+};
+
+function renderCalendar() {
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    document.getElementById("monthYear").innerText = currentDate.toLocaleString("default", { month: "long", year: "numeric" });
+
+    for (let i = 0; i < firstDay; i++) {
+        calendar.innerHTML += `<div></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        let eventHTML = "";
+
+        if (events[dateStr]) {
+            events[dateStr].forEach(e => {
+                eventHTML += `<div class="event">${e}</div>`;
+            });
+        }
+
+        calendar.innerHTML += `
+            <div class="day">
+                <strong>${day}</strong>
+                ${eventHTML}
+            </div>
+        `;
+    }
+}
+
+function changeMonth(offset) {
+    currentDate.setMonth(currentDate.getMonth() + offset);
+    renderCalendar();
+}
+
+renderCalendar();
+</script>
+</body>
+</html>
